@@ -1,0 +1,25 @@
+@(rootUrl: String, model: models.advert.AdvertiserAddGoldConfirm)
+
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>m8chat Advertiser Registration Confirmation</title>
+    </head>
+    @defining(rootUrl + s"/advert/advertisers/register/confirm-email?id=${model.advertiserId}&token=${model.emailConfirmToken}") { confirmUrl =>
+        <body>
+            <p>Hi @model.name,</p>
+            <p>Thanks for signing up with m8chat.</p>
+            <p>Your gold advert plan has been created with the following information:</p>
+            <ul style="list-style-type : none">
+                <li>Monthly fee: $@{f"${model.price}%.2f"}</li>
+                <li>Password: @model.password</li>
+            </ul>
+            <p>If there are any issues, <b>please contact us before confirming your registration.</b> If the above information is correct, to confirm your registration, please <a href="@confirmUrl" target="_blank">click here</a> or copy and paste the link below into your browser.</p>
+            <p> <a href="@confirmUrl" target="_blank">@confirmUrl</a></p>
+            <p>Remember to change your password after confirming the email address.</p>
+            <p>Cheers,<br>The m8chat team</p>
+        </body>
+    }
+</html>

@@ -1,0 +1,39 @@
+@(addForm: Form[models.advert.AdvertiserAddGold])(implicit request: RequestHeader)
+
+@import utils.bootstrap._
+@import helper._
+
+@main("Add Gold") {
+} {
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Add Gold Advertiser</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    @request.flash.get("message").map { message =>
+                        <div class="alert alert-success">@message</div>
+                    }
+                    @helper.form(action = controllers.advert.routes.AdvertiserController.addGold(), 'role -> "form") {
+                        <fieldset>
+                            @CSRF.formField
+                            @addForm.globalError.map { error =>
+                                <div class="alert alert-danger">@error.message</div>
+                            }
+                            @helper.inputText(addForm("name"), '_label -> "Name:", 'class -> "form-control", 'autocomplete -> "off", 'autofocus -> "autofocus")
+                            @helper.inputText(addForm("companyName"), '_label -> "Company Name:", 'autocomplete -> "off", 'class -> "form-control")
+                            @helper.inputText(addForm("email"), '_label -> "Email:", 'type -> "email", 'autocomplete -> "off", 'class -> "form-control")
+                            @helper.inputText(addForm("price"), '_label -> "Monthly Fee: (includes GST)", 'type -> "number", 'autocomplete -> "off", 'class -> "form-control")
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </fieldset>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

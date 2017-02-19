@@ -1,0 +1,75 @@
+@(basicInfoForm: Form[models.advert.AdvertiserBasicInfo])(implicit request: RequestHeader, lang: play.api.i18n.Lang)
+@name(suffix: String) = @{
+    basicInfoForm("name").value.map(s => s"$s ").getOrElse("") + suffix
+}
+
+@import utils.bootstrap._
+@import helper._
+@import org.joda.time.DateTime
+@import org.joda.time.format.DateTimeFormat
+@import play.api.templates.PlayMagic.toHtmlArgs
+
+@main(name("Basic Info")) {
+} {
+    <script src="@routes.Assets.at("javascripts/directives/mc-blur.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/controllers/advertiser-basic-info-controller.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/controllers/advertiser-suspend-controller.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/controllers/advertiser-resume-controller.js")" type="text/javascript"></script>
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">@name("Basic Info")</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    @views.html.advert.tags.advertiserDetailsTabs(basicInfoForm("advertiserId").value.get.toLong, "basicInfo")
+                    <div class="tab-content">
+                        <div class="tab-pane active" ng-controller="AdvertiserBasicInfoController">
+                            @request.flash.get("message").map { message =>
+                                <div class="alert alert-success">@message</div>
+                            }
+                            @helper.form(action = controllers.advert.routes.AdvertiserController.saveBasicInfo(basicInfoForm("advertiserId").value.get.toLong), 'role -> "form", 'autocomplete -> "off") {
+                                @defining(DateTimeFormat.forPattern(DateTimeFormat.patternForStyle("MS", lang.toLocale))) { dateFormatter =>
+                                    <fieldset>
+                                        @CSRF.formField
+                                        @basicInfoForm.globalError.map { error =>
+                                            <div class="alert alert-danger">@error.message</div>
+                                        }
+                                        @helper.inputText(basicInfoForm("advertiserId"), '_label -> "Id:", 'class -> "form-control", 'readonly -> "readonly")
+                                        @helper.inputText(basicInfoForm("name"), '_label -> "Name:", 'class -> "form-control")
+                                        @helper.inputText(basicInfoForm("companyName"), '_label -> "Company Name:", 'class -> "form-control")
+                                        @helper.inputText(basicInfoForm("email"), '_label -> "Email:", 'type -> "email", 'class -> "form-control")
+                                        @helper.inputText(basicInfoForm("status"), '_label -> "Status:", 'class -> "form-control", 'readonly -> "readonly")
+                                        @helper.input(basicInfoForm("createdAt"), '_label -> "Register At:", 'class -> "form-control", 'readonly -> "readonly") { (id, name, value, args) =>
+                                            <input name="@name" id="@id" value="@{dateFormatter.print(new DateTime(value.get.toLong))}" @toHtmlArgs(args)>
+                                        }
+                                        @if(basicInfoForm("activeUtil").value.isDefined && !basicInfoForm("status").value.contains("suspended")) {
+                                            @helper.input(basicInfoForm("activeUtil"), '_label -> "Active Until:", 'class -> "form-control", 'readonly -> "readonly") { (id, name, value, args) =>
+                                                <input name="@name" id="@id" value="@{dateFormatter.print(new DateTime(value.get.toLong))}" @toHtmlArgs(args)>
+                                            }
+                                        }
+                                        @if(basicInfoForm("status").value.contains("suspended")) {
+                                            @helper.textarea(basicInfoForm("suspendedReason"), '_label -> "Suspended Reason:", 'rows -> "4", 'class -> "form-control")
+                                        }
+                                        @helper.textarea(basicInfoForm("adminNote"), '_label -> "Admin Note:", 'rows -> "6", 'class -> "form-control")
+                                        @if(basicInfoForm("status").value.contains("confirmed") || basicInfoForm("status").value.contains("active")) {
+                                            <button type="button" ng-click="suspend(@basicInfoForm("advertiserId").value.get.toLong)" class="btn btn-warning">Suspend</button>
+                                        }
+                                        @if(basicInfoForm("status").value.contains("suspended")) {
+                                            <button type="button" ng-click="resume(@basicInfoForm("advertiserId").value.get.toLong)" class="btn btn-warning">Resume</button>
+                                        }
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </fieldset>
+                                }
+                            }
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

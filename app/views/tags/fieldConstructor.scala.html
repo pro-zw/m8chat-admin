@@ -1,0 +1,14 @@
+@(elements: views.html.helper.FieldElements)(implicit lang: play.api.i18n.Lang)
+
+<div class="form-group @if(elements.hasErrors) {has-error}">
+    <label class="control-label" for="@elements.id">@elements.label</label>
+    @*
+    @if(elements.infos.length > 0) {
+        <p class="help-block">@Html(elements.infos.mkString(", "))</p>
+    }
+    *@
+    @elements.input
+    @if(elements.hasErrors) {
+        <p class="help-block">@Html(elements.errors.mkString("<br>"))</p>
+    }
+</div>

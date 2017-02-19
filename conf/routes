@@ -1,0 +1,41 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Login page
+GET           /login                                                         controllers.Application.loginPage
+POST          /login                                                         controllers.Application.login
+GET           /logout                                                        controllers.Application.logout
+
+# Home page
+GET           /                                                              controllers.Application.index
+
+# Advertiser pages
+GET           /advertisers/list                                              controllers.advert.AdvertiserController.listPage
+GET           /advertisers/add-gold                                          controllers.advert.AdvertiserController.addGoldPage
+POST          /advertisers/add-gold                                          controllers.advert.AdvertiserController.addGold
+GET           /advertisers/$advertiserId<[0-9]+>/basic-info                  controllers.advert.AdvertiserController.basicInfoPage(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/basic-info                  controllers.advert.AdvertiserController.saveBasicInfo(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/suspend                     controllers.advert.AdvertiserController.suspend(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/resume                      controllers.advert.AdvertiserController.resume(advertiserId: Long)
+GET           /advertisers/$advertiserId<[0-9]+>/plan                        controllers.advert.AdvertiserController.planPage(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/plan                        controllers.advert.AdvertiserController.changePlan(advertiserId: Long)
+GET           /advertisers/$advertiserId<[0-9]+>/business                    controllers.advert.AdvertiserController.businessPage(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/business                    controllers.advert.AdvertiserController.saveBusiness(advertiserId: Long)
+GET           /advertisers/$advertiserId<[0-9]+>/advert-photos               controllers.advert.AdvertiserController.advertPhotosPage(advertiserId: Long)
+POST          /advertisers/$advertiserId<[0-9]+>/advert-photos/$index<[0-9]+>        controllers.advert.AdvertiserController.updateAdvertPhoto(advertiserId: Long, index: Int)
+DELETE        /advertisers/$advertiserId<[0-9]+>/advert-photos/$index<[0-9]+>        controllers.advert.AdvertiserController.deleteAdvertPhoto(advertiserId: Long, index: Int)
+GET           /advertisers/$advertiserId<[0-9]+>/advert-photos/reorganise            controllers.advert.AdvertiserController.reorganiseAdvertPhotos(advertiserId: Long)
+GET           /advertisers/$advertiserId<[0-9]+>/bills                               controllers.advert.AdvertiserController.billsPage(advertiserId: Long)
+
+# Mobile user pages
+GET           /m8users/list                                                  controllers.social.M8UserController.listPage
+GET           /m8users/$userId<[0-9]+>/basic-info                            controllers.social.M8UserController.basicInfoPage(userId: Long)
+POST          /m8users/$userId<[0-9]+>/basic-info                            controllers.social.M8UserController.saveBasicInfo(userId: Long)
+GET           /m8users/$userId<[0-9]+>/pictures                              controllers.social.M8UserController.picturesPage(userId: Long)
+POST          /m8users/$userId<[0-9]+>/pictures/$index<[0-9]+>               controllers.social.M8UserController.updatePicture(userId: Long, index: Int)
+DELETE        /m8users/$userId<[0-9]+>/pictures/$index<[0-9]+>               controllers.social.M8UserController.deletePicture(userId: Long, index: Int)
+GET           /m8users/$userId<[0-9]+>/pictures/reorganise                   controllers.social.M8UserController.reorganisePictures(userId: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET           /assets/*file                                                  controllers.Assets.at(path="/public", file)

@@ -1,0 +1,43 @@
+@(photosModel: models.advert.AdvertiserAdvertPhotos)(implicit request: RequestHeader)
+@name(suffix: String) = @{
+    photosModel.name + " " + suffix
+}
+
+@import helper._
+
+@main(name("Advert Photos")) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/photo-uploader.css")">
+} {
+    <script src="@routes.Assets.at("javascripts/directives/mc-photo-uploader.js")" type="text/javascript"></script>
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">@name("Advert Photos")</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    @views.html.advert.tags.advertiserDetailsTabs(photosModel.advertiserId, "photos")
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            @* Note the photo-index follows the PostgreSQL array convention. It starts from 1. *@
+                            @CSRF.formField
+                            @for((photo, index) <- photosModel.photos.zipWithIndex) {
+                                @if(photo.length == 0) {
+                                    <div mc-photo-uploader photo-index="@{index + 1}" photo-src="@routes.Assets.at("/images/photo-empty.png")"></div>
+                                } else {
+                                    <div mc-photo-uploader photo-index="@{index + 1}" photo-src="//@photo"></div>
+                                }
+                            }
+                            <div style="clear: both;"></div>
+                            <div><a href="@{controllers.advert.routes.AdvertiserController.reorganiseAdvertPhotos(photosModel.advertiserId)}" class="btn btn-success">Reorganise</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

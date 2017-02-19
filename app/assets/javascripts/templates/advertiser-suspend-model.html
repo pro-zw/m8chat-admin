@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3 class="modal-title">Enter Suspend Reason</h3>
+</div>
+<form ng-submit="ok()" novalidate name="suspendForm">
+    <div class="modal-body">
+        <div class="form-group">
+            <textarea
+                name="reason"
+                class="form-control"
+                autofocus="autofocus"
+                ng-model="suspendModel.reason"
+                ng-maxlength="120"
+                required>
+            </textarea>
+            <small class="help-block">Max 120 characters</small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div mc-alert-bar topic="suspend-advertiser-alert"></div>
+        <span ng-cloak ng-show="isSuspending"><i class="fa fa-spinner fa-spin"></i></span>&nbsp;&nbsp;
+        <button type="button" class="btn btn-default" ng-click="cancel()" ng-disabled="isSuspending">Cancel</button>
+        <button type="submit" class="btn btn-success" ng-disabled="suspendForm.$invalid || isSuspending">Ok</button>
+    </div>
+</form>

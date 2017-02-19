@@ -1,0 +1,43 @@
+@(picturesModel: models.social.M8UserPictures)(implicit request: RequestHeader)
+@name(suffix: String) = @{
+    picturesModel.username + " " + suffix
+}
+
+@import helper._
+
+@main(name("Pictures")) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/photo-uploader.css")">
+} {
+    <script src="@routes.Assets.at("javascripts/directives/mc-photo-uploader.js")" type="text/javascript"></script>
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">@name("Pictures")</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    @views.html.social.tags.m8UserDetailsTabs(picturesModel.userId, "pictures")
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            @* Note the photo-index follows the PostgreSQL array convention. It starts from 1. *@
+                            @CSRF.formField
+                            @for((pic, index) <- picturesModel.pictures.zipWithIndex) {
+                                @if(pic.length == 0) {
+                                    <div mc-photo-uploader photo-index="@{index + 1}" photo-src="@routes.Assets.at("/images/photo-empty.png")"></div>
+                                } else {
+                                    <div mc-photo-uploader photo-index="@{index + 1}" photo-src="//@pic"></div>
+                                }
+                            }
+                            <div style="clear: both;"></div>
+                            <div><a href="@{controllers.social.routes.M8UserController.reorganisePictures(picturesModel.userId)}" class="btn btn-success">Reorganise</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

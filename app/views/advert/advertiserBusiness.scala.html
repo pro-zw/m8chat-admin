@@ -1,0 +1,52 @@
+@(businessForm: Form[models.advert.AdvertiserBusiness])(implicit request: RequestHeader)
+@name(suffix: String) = @{
+    businessForm("name").value.map(s => s"$s ").getOrElse("") + suffix
+}
+
+@import utils.bootstrap._
+@import helper._
+
+@main(name("Business")) {
+} {
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">@name("Business")</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    @views.html.advert.tags.advertiserDetailsTabs(businessForm("advertiserId").value.get.toLong, "business")
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            @request.flash.get("message").map { message =>
+                                <div class="alert alert-success">@message</div>
+                            }
+                            @helper.form(action = controllers.advert.routes.AdvertiserController.saveBusiness(businessForm("advertiserId").value.get.toLong), 'role -> "form", 'autocomplete -> "off") {
+                                @CSRF.formField
+                                @businessForm.globalError.map { error =>
+                                    <div class="alert alert-danger">@error.message</div>
+                                }
+                                <input type="hidden" name="advertiserId" id="advertiserId" value="@businessForm("advertiserId").value.get">
+                                <input type="hidden" name="advertId" id="advertId" value="@businessForm("advertId").value.get">
+                                <input type="hidden" name="name" id="name" value="@businessForm("name").value.get">
+                                @helper.inputText(businessForm("businessName"), '_label -> "Business Name:", 'class -> "form-control")
+                                @helper.inputText(businessForm("contactNumber"), '_label -> "Contact Number:", 'class -> "form-control")
+                                @helper.inputText(businessForm("website"), '_label -> "Website:", 'class -> "form-control")
+                                @helper.inputText(businessForm("address"), '_label -> "Address:", 'class -> "form-control", 'tooltip -> "Changing address won't change the latitude and longitude, so make sure all of them are correctly updated.", Symbol("tooltip-trigger") -> "focus", Symbol("tooltip-placement") -> "left", Symbol("tooltip-append-to-body") -> "true")
+                                @helper.inputText(businessForm("latitude"), '_label -> "Latitude:", 'class -> "form-control")
+                                @helper.inputText(businessForm("longitude"), '_label -> "Longitude:", 'class -> "form-control")
+                                @helper.textarea(businessForm("description"), '_label -> "Description:", 'rows -> "6", 'class -> "form-control")
+                                @helper.inputText(businessForm("displayedTimes"), '_label -> "Displayed Times:", 'class -> "form-control", 'readonly -> "readonly")
+                                <button type="submit" class="btn btn-success">Save</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

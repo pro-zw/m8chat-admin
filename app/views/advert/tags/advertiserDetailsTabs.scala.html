@@ -1,0 +1,8 @@
+@(advertiserId: Long, activeTab: String)
+<ul class="nav nav-tabs">
+    <li @if(activeTab == "basicInfo"){class="active"}><a href="@controllers.advert.routes.AdvertiserController.basicInfoPage(advertiserId)">Basic Info</a></li>
+    <li @if(activeTab == "business"){class="active"}><a href="@controllers.advert.routes.AdvertiserController.businessPage(advertiserId)">Business</a></li>
+    <li @if(activeTab == "photos"){class="active"}><a href="@controllers.advert.routes.AdvertiserController.advertPhotosPage(advertiserId)">Advert Photos</a></li>
+    <li @if(activeTab == "plan"){class="active"}><a href="@controllers.advert.routes.AdvertiserController.planPage(advertiserId)">Plan</a></li>
+    <li @if(activeTab == "bills"){class="active"}><a href="@controllers.advert.routes.AdvertiserController.billsPage(advertiserId)">Bills</a></li>
+</ul>

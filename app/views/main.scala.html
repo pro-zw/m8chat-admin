@@ -1,0 +1,48 @@
+@(title: String)(styleSheets: Html)(javaScripts: Html)(content: Html)
+
+<!DOCTYPE html>
+
+<html ng-app="m8chatAdminApp" class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>@title</title>
+
+        <link rel="stylesheet" href="@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("lib/metisMenu/metisMenu.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("lib/morrisjs/morris.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("lib/font-awesome/css/font-awesome.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/sb-admin-2.css")">
+        @styleSheets
+
+        <script src="@routes.Assets.at("lib/modernizr/modernizr.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/jquery/jquery.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/metisMenu/metisMenu.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/raphaeljs/raphael-min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/morrisjs/morris.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angularjs/angular.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angularjs/angular-cookies.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angularjs/angular-sanitize.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angularjs/angular-animate.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angularjs/angular-touch.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angular-ui-utils/ui-utils.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/angular-ui-bootstrap/ui-bootstrap-tpls.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/app.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/filters/default.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/services/alert-service.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/services/app-util.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/directives/mc-side-menu.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/directives/mc-alertbar.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/controllers/nav-controller.js")" type="text/javascript"></script>
+
+        @javaScripts
+
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    </head>
+    <body>
+        @content
+    </body>
+</html>

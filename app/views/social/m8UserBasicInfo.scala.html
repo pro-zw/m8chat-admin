@@ -1,0 +1,62 @@
+@(basicInfoForm: Form[models.social.M8UserBasicInfo])(implicit request: RequestHeader, lang: play.api.i18n.Lang)
+@name(suffix: String) = @{
+    basicInfoForm("username").value.map(s => s"$s ").getOrElse("") + suffix
+}
+
+@import utils.bootstrap._
+@import helper._
+@import org.joda.time.DateTime
+@import org.joda.time.format.DateTimeFormat
+@import play.api.templates.PlayMagic.toHtmlArgs
+
+@main(name("Basic Info")) {
+} {
+} {
+    <div id="wrapper">
+        @views.html.tags.navigation()
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">@name("Basic Info")</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    @views.html.social.tags.m8UserDetailsTabs(basicInfoForm("userId").value.get.toLong, "basicInfo")
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            @request.flash.get("message").map { message =>
+                                <div class="alert alert-success">@message</div>
+                            }
+                            @helper.form(action = controllers.social.routes.M8UserController.saveBasicInfo(basicInfoForm("userId").value.get.toLong), 'role -> "form", 'autocomplete -> "off") {
+                                <fieldset>
+                                    @CSRF.formField
+                                    @basicInfoForm.globalError.map { error =>
+                                        <div class="alert alert-danger">@error.message</div>
+                                    }
+                                    @helper.inputText(basicInfoForm("userId"), '_label -> "Id:", 'class -> "form-control", 'readonly -> "readonly")
+                                    @helper.inputText(basicInfoForm("email"), '_label -> "Email:", 'type -> "email", 'class -> "form-control")
+                                    @helper.inputText(basicInfoForm("username"), '_label -> "User Name:", 'class -> "form-control")
+                                    @helper.inputText(basicInfoForm("firstName"), '_label -> "First Name:", 'class -> "form-control")
+                                    @helper.select(basicInfoForm("gender"), options("Male" -> "Male", "Female" -> "Female"), '_label -> "Gender:", 'class -> "form-control")
+                                    @helper.select(basicInfoForm("preferGender"), options("Male" -> "Male", "Female" -> "Female", "Both" -> "Both"), '_label -> "Prefer Gender:", 'class -> "form-control")
+                                    @helper.textarea(basicInfoForm("description"), '_label -> "Description:", 'rows -> "6", 'class -> "form-control")
+                                    @defining(DateTimeFormat.forPattern(DateTimeFormat.patternForStyle("MS", lang.toLocale))) { dateFormatter =>                     @helper.input(basicInfoForm("createdAt"), '_label -> "Register At:", 'class -> "form-control", 'readonly -> "readonly") { (id, name, value, args) =>
+                                            <input name="@name" id="@id" value="@{dateFormatter.print(new DateTime(value.get.toLong))}" @toHtmlArgs(args)>
+                                        }
+                                    }
+                                    @helper.inputText(basicInfoForm("latitude"), '_label -> "Latitude:", 'class -> "form-control")
+                                    @helper.inputText(basicInfoForm("longitude"), '_label -> "Longitude:", 'class -> "form-control")
+                                    @helper.inputText(basicInfoForm("interests"), '_label -> "Interests:", 'class -> "form-control", 'readonly -> "readonly")
+                                    @helper.inputText(basicInfoForm("blockedTimes"), '_label -> "Blocked Times (greater than 6 blocks the user immediately):", 'type -> "number", 'class -> "form-control")
+                                    @helper.textarea(basicInfoForm("adminNote"), '_label -> "Admin Note:", 'rows -> "6", 'class -> "form-control")
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </fieldset>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
